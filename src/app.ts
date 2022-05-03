@@ -1,8 +1,6 @@
 import express, { urlencoded } from 'express';
 const { MongoClient, ServerApiVersion } = require('mongodb');
 import { Collection } from 'mongodb';
-import { runInThisContext } from 'vm';
-import * as test_users from '../test/users.json'
 
 class Server {
     mdb_username: string = "ourfinalsdev" as string;
