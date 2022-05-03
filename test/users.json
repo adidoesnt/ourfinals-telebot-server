@@ -1,0 +1,59 @@
+[
+    {
+        "username": "adidoesnt",
+        "year": 3,
+        "faculty": "computing",
+        "nusnet_id": "e0407583",
+        "assignments_as_student": [
+            {
+                "module_code": "sampleModuleCode",
+                "title": "sampleTitle",
+                "description": "sampleDescription",
+                "tutor_username": ""
+            },
+            {
+                "module_code": "sampleModuleCode2",
+                "title": "sampleTitle2",
+                "description": "sampleDescription2",
+                "tutor_username": ""
+            }
+        ],
+        "assignments_as_tutor": [
+            {
+                "module_code": "sampleModuleCode3",
+                "title": "sampleTitle3",
+                "description": "sampleDescription3",
+                "student_username": "nselcheung"
+            },
+            {
+                "module_code": "sampleModuleCode4",
+                "title": "sampleTitle4",
+                "description": "sampleDescription4",
+                "student_username": "nselcheung"
+            }
+        ]
+    },
+    {
+        "username": "nselcheung",
+        "year": 3,
+        "faculty": "science",
+        "nusnet_id": "e0426095",
+        "assignments_as_student": [
+            {
+                "module_code": "sampleModuleCode3",
+                "title": "sampleTitle3",
+                "description": "sampleDescription3",
+                "tutor_username": "adidoesnt"
+            },
+            {
+                "module_code": "sampleModuleCode4",
+                "title": "sampleTitle4",
+                "description": "sampleDescription4",
+                "tutor_username": "adidoesnt"
+            }
+        ],
+        "assignments_as_tutor": [
+
+        ] 
+    }
+]

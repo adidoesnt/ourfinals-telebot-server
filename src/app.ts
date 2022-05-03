@@ -1,5 +1,8 @@
-import express, { urlencoded } from 'express';;
+import express, { urlencoded } from 'express';
 const { MongoClient, ServerApiVersion } = require('mongodb');
+import { Collection } from 'mongodb';
+import { runInThisContext } from 'vm';
+import * as test_users from '../test/users.json'
 
 class Server {
     mdb_username: string = "ourfinalsdev" as string;
@@ -7,7 +10,10 @@ class Server {
     mdb_cluster: string = "ourfinals-cluster" as string;
     mdb_database: string = "ourfinals-database" as string;
     mdb_users: string = "ourfinals-users" as string;
-    uri: string = `mongodb+srv://${this.mdb_username}:${this.mdb_pass}@${this.mdb_cluster}.ufb3z.mongodb.net/${this.mdb_database}?retryWrites=true&w=majority`;
+    uri: string = `mongodb+srv://${this.mdb_username}:${this.mdb_pass}`+
+        `@${this.mdb_cluster}.ufb3z.mongodb.net/${this.mdb_database}`+
+        `?retryWrites=true&w=majority`;
+    user_collection: Collection<Document> | undefined;
     client = new MongoClient(this.uri, { 
         useNewUrlParser: true, 
         useUnifiedTopology: true, 
@@ -19,7 +25,7 @@ class Server {
             if(err) {
                 console.warn(err);
             } else {
-                const collection = this.client.db(this.mdb_database).collection(this.mdb_users);
+                this.user_collection = this.client.db(this.mdb_database).collection(this.mdb_users);
                 console.log('connected to database.')
             }
         });
@@ -43,12 +49,18 @@ class Application {
     }
 
     initRoutes() {
+        this.app.listen(this.port, () => {
+            console.log(`server listening at port http://localhost:${this.port}`)
+        });
+
         this.app.get('/', (req, res) => {
             return res.send('server listening...');
         });
-        
-        this.app.listen(this.port, () => {
-            console.log(`server listening at port http://localhost:${this.port}`)
+
+        this.app.post('/api/users/add', (req, res) => {
+            const userData = req.body;
+            this.server.user_collection?.insertOne(userData);
+            return res.sendStatus(200);
         });
     }
 }
