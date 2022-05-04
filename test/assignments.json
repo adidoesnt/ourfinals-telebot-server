@@ -1,0 +1,16 @@
+[
+    {
+        "module_code": "sampleCode1",
+        "title": "sampleTitle1",
+        "description": "sampleDescription1",
+        "student_username": "adidoesnt",
+        "tutor_username": "nselcheung"
+    },
+    {
+        "module_code": "sampleCode2",
+        "title": "sampleTitle2",
+        "description": "sampleDescription2",
+        "student_username": "nselcheung",
+        "tutor_username": "adidoesnt"
+    }
+]
