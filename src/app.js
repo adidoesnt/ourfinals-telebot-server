@@ -51,7 +51,7 @@ class Application {
 
     initRoutes() {
         this.app.listen(this.port, () => {
-            console.log(`server listening at port http://localhost:${this.port}`)
+            console.log(`server listening at port ${this.port}`)
         });
 
         this.app.get('/', (req, res) => {
