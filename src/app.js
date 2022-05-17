@@ -68,7 +68,11 @@ class Application {
         this.app.get('/users/:username', async (req, res) => {
             const username = req.params.username;
             const user = await this.server.user_collection.findOne({username: username});
-            return res.send(user);
+            if(user) {
+                return res.send(user);
+            } else {
+                return res.sendStatus(404);
+            }
         });
 
         // ASSIGNMENT ENDPOINTS
@@ -81,7 +85,11 @@ class Application {
         this.app.get('/assignments/:id', async (req, res) => {
             const id = new ObjectId(req.params.id);
             const assignment = await this.server.assignment_collection.findOne({ _id: id });
-            return res.send(assignment);
+            if(assignment) {
+                return res.send(assignment);
+            } else {
+                return res.sendStatus(404);
+            }
         });
 
     }
