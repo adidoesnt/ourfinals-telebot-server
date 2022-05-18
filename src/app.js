@@ -50,9 +50,7 @@ class Application {
             if (req.headers["x-api-key"] == process.env.API_KEY) {
                 next();
             } else {
-                return res.status(401).send({
-                    message: 'Unauthorized'
-                });
+                return res.status(401).send('unauthorized');
             }
         })
         this.initRoutes()
@@ -64,7 +62,7 @@ class Application {
         });
 
         this.app.get('/', (req, res) => {
-            return res.send('ourfinals server listening...');
+            return res.status(200).send('ourfinals server listening...');
         });
 
         // USER ENDPOINTS
@@ -78,9 +76,9 @@ class Application {
             const username = req.params.username;
             const user = await this.server.user_collection.findOne({username: username});
             if(user) {
-                return res.send(user);
+                return res.status(200).send(user);
             } else {
-                return res.sendStatus(404);
+                return res.status(404).send('not found');
             }
         });
 
@@ -95,9 +93,9 @@ class Application {
             const id = new ObjectId(req.params.id);
             const assignment = await this.server.assignment_collection.findOne({ _id: id });
             if(assignment) {
-                return res.send(assignment);
+                return res.status(200).send(assignment);
             } else {
-                return res.sendStatus(404);
+                return res.status(404).send('not found');
             }
         });
 
