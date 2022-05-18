@@ -47,9 +47,8 @@ class Application {
         this.app.use(express.json());
         this.app.use(express.urlencoded({ extended: true }));
         this.app.use((req, res, next) => {
-            // TODO: store api key in environment variables
-            if (req.headers["x-api-key"] == "secret") {
-                next()
+            if (req.headers["x-api-key"] == process.env.API_KEY) {
+                next();
             } else {
                 return res.status(401).send({
                     message: 'Unauthorized'
