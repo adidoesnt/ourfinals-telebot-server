@@ -41,11 +41,21 @@ class Application {
     server = new Server();
     app = express();
     port = Number(process.env.PORT) || 3000
-
+    
     init() {
         this.server.init()
         this.app.use(express.json());
         this.app.use(express.urlencoded({ extended: true }));
+        this.app.use((req, res, next) => {
+            // TODO: store api key in environment variables
+            if (req.headers["x-api-key"] == "secret") {
+                next()
+            } else {
+                return res.status(401).send({
+                    message: 'Unauthorized'
+                });
+            }
+        })
         this.initRoutes()
     }
 
