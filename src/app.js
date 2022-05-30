@@ -1,4 +1,5 @@
 const express = require('express');
+const request = require("supertest");
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('dotenv').config('./env');
 
@@ -68,7 +69,7 @@ class Application {
         // USER ENDPOINTS
         this.app.post('/users/add', async (req, res) => {
             const userData = req.body;
-            const body = this.server.user_collection.insertOne(userData);
+            const body = await this.server.user_collection.insertOne(userData);
             return res.status(200).send({
                 _id: body.insertedId.toString()
             });
@@ -103,6 +104,30 @@ class Application {
             }
         });
 
+        // COMBINED ENDPOINTS
+        this.app.post('/users/:username/assignments_as_student/add', async(req, res) => {
+            const assignment_id = req.body['_id'];
+            const client = request(req.app);
+            const student = client.get(`/users/${req.params.username}`);
+            const assignments = student['assignments_as_student'];
+            assignments.push(assignment_id);
+            const query = { "username": username }
+            const update = { "$set": { "assignments_as_student": assignments }}
+            const body = await this.server.user_collection.updateOne(query, update);
+            return res.sendStatus(200);
+        });
+
+        this.app.post('/users/:username/assignments_as_tutor/add', async(req, res) => {
+            const assignment_id = req.body['_id'];
+            const client = request(req.app);
+            const tutor = client.get(`/users/${req.params.username}`);
+            const assignments = tutor['assignments_as_tutor'];
+            assignments.push(assignment_id);
+            const query = { "username": username }
+            const update = { "$set": { "assignments_as_tutor": assignments }}
+            const body = await this.server.user_collection.updateOne(query, update);
+            return res.sendStatus(200);
+        });
     }
 }
 
