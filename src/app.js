@@ -1,5 +1,5 @@
 const express = require('express');
-const request = require("supertest");
+const request = require("request")
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('dotenv').config('./env');
 
@@ -42,6 +42,7 @@ class Application {
     server = new Server();
     app = express();
     port = Number(process.env.PORT) || 3000
+    url = 'https://ourfinals-telebot-server.herokuapp.com/'
     
     init() {
         this.server.init()
@@ -105,28 +106,38 @@ class Application {
         });
 
         // COMBINED ENDPOINTS
-        this.app.post('/users/:username/assignments_as_student/add', async(req, res) => {
+        this.app.post('/users/:username/assignments_as_student/add', async (req, res) => {
             const assignment_id = req.body['_id'];
-            const client = request(req.app);
-            const student = client.get(`/users/${req.params.username}`);
-            const assignments = student['assignments_as_student'];
-            assignments.push(assignment_id);
-            const query = { "username": username }
-            const update = { "$set": { "assignments_as_student": assignments }}
-            const body = await this.server.user_collection.updateOne(query, update);
-            return res.sendStatus(200);
+            const username = req.params.username
+            const self = this;
+            request(`${this.url}users/${username}`, async function (error, response, body) {
+                const student = await response.body;
+                const assignments = student["assignments_as_student"]
+                    ? student["assignments_as_student"]
+                    : [];
+                assignments.push(assignment_id);
+                const query = { "username": username }
+                const update = { "$set": { "assignments_as_student": assignments }}
+                await self.server.user_collection.updateOne(query, update);
+                return res.sendStatus(200);
+            }).setHeader('x-api-key', process.env.API_KEY);
         });
 
         this.app.post('/users/:username/assignments_as_tutor/add', async(req, res) => {
             const assignment_id = req.body['_id'];
-            const client = request(req.app);
-            const tutor = client.get(`/users/${req.params.username}`);
-            const assignments = tutor['assignments_as_tutor'];
-            assignments.push(assignment_id);
-            const query = { "username": username }
-            const update = { "$set": { "assignments_as_tutor": assignments }}
-            const body = await this.server.user_collection.updateOne(query, update);
-            return res.sendStatus(200);
+            const username = req.params.username
+            const self = this;
+            request(`${this.url}users/${username}`, async function (error, response, body) {
+                const tutor = await response.body;
+                const assignments = tutor["assignments_as_tutor"]
+                    ? tutor["assignments_as_tutor"]
+                    : [];
+                assignments.push(assignment_id);
+                const query = { "username": username }
+                const update = { "$set": { "assignments_as_tutor": assignments }}
+                await self.server.user_collection.updateOne(query, update);
+                return res.sendStatus(200);
+            }).setHeader('x-api-key', process.env.API_KEY);
         });
     }
 }
