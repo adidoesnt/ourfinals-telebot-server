@@ -66,10 +66,12 @@ class Application {
         });
 
         // USER ENDPOINTS
-        this.app.post('/users/add', (req, res) => {
+        this.app.post('/users/add', async (req, res) => {
             const userData = req.body;
-            this.server.user_collection.insertOne(userData);
-            return res.sendStatus(200);
+            const body = this.server.user_collection.insertOne(userData);
+            return res.status(200).send({
+                _id: body.insertedId.toString()
+            });
         });
 
         this.app.get('/users/:username', async (req, res) => {
@@ -83,10 +85,12 @@ class Application {
         });
 
         // ASSIGNMENT ENDPOINTS
-        this.app.post('/assignments/add', (req, res) => {
+        this.app.post('/assignments/add', async (req, res) => {
             const assignmentData = req.body;
-            this.server.assignment_collection.insertOne(assignmentData);
-            return res.sendStatus(200);
+            const body = await this.server.assignment_collection.insertOne(assignmentData);
+            return res.status(200).send({
+                _id: body.insertedId.toString()
+            });
         });
 
         this.app.get('/assignments/:id', async (req, res) => {
