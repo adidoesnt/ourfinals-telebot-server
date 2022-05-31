@@ -111,7 +111,9 @@ class Application {
             const username = req.params.username
             const self = this;
             request(`${this.url}users/${username}`, async function (error, response, body) {
-                const student = await response.body;
+                const result = await response.body;
+                const student = JSON.parse(result);
+                console.log(student["assignments_as_student"])
                 const assignments = student["assignments_as_student"]
                     ? student["assignments_as_student"]
                     : [];
@@ -128,7 +130,8 @@ class Application {
             const username = req.params.username
             const self = this;
             request(`${this.url}users/${username}`, async function (error, response, body) {
-                const tutor = await response.body;
+                const result = await response.body;
+                const tutor = JSON.parse(result);
                 const assignments = tutor["assignments_as_tutor"]
                     ? tutor["assignments_as_tutor"]
                     : [];
