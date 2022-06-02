@@ -119,7 +119,11 @@ class Application {
             }
             const cursor = await this.server.assignment_collection.find(query, options);
             const assignments = await cursor.toArray();
-            return res.status(200).send(assignments);
+            if(!assignments || assignments == []) {
+                return res.status(404).send([]);
+            } else {
+                return res.status(200).send(assignments);
+            }
         });
 
         // COMBINED ENDPOINTS
