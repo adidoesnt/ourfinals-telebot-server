@@ -115,7 +115,7 @@ class Application {
             }
             const options = { 
                 sort: { title: 1 },
-                projection: { _id: 0, module_code: 1, title: 1, description: 1, file_link: 1 }
+                projection: { _id: 1, module_code: 1, title: 1, description: 1, file_link: 1 }
             }
             const cursor = await this.server.assignment_collection.find(query, options);
             const assignments = await cursor.toArray();
