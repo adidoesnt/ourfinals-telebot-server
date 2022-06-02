@@ -95,7 +95,7 @@ class Application {
             });
         });
 
-        this.app.get('/assignments/:id', async (req, res) => {
+        this.app.get('/assignments/id/:id', async (req, res) => {
             const id = new ObjectId(req.params.id);
             const assignment = await this.server.assignment_collection.findOne({ _id: id });
             if(assignment) {
@@ -103,6 +103,23 @@ class Application {
             } else {
                 return res.status(404).send('not found');
             }
+        });
+
+        this.app.get('/assignments/code/:code', async (req, res) => {
+            const code = req.params.code.toUpperCase();
+            const query = {
+                $and: [
+                    { module_code: code },
+                    { tutor_username: "" }
+                ]
+            }
+            const options = { 
+                sort: { title: 1 },
+                projection: { _id: 0, module_code: 1, title: 1, description: 1, file_link: 1 }
+            }
+            const cursor = await this.server.assignment_collection.find(query, options);
+            const assignments = await cursor.toArray();
+            return res.status(200).send(assignments);
         });
 
         // COMBINED ENDPOINTS
