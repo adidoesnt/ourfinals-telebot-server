@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "server for ourfinals telegram bot",
   "main": "src/app.js",
-  "author": "Aditya Banerjee <aditya_banerjee@icloud.com>",
+  "author": "Aditya Banerjee",
   "license": "MIT",
   "devDependencies": {
     "ts-node-dev": "^1.1.8",

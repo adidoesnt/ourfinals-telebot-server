@@ -1,3 +1,7 @@
+/**            OURFINALS TELEGRAM BOT SERVER             **/
+/**      AUTHORED BY ADITYA BANERJEE AND PARTH KABRA     **/
+/**              V1.0.1 (TEST) - 2 MAY 2022              **/
+
 const express = require('express');
 const request = require("request")
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
