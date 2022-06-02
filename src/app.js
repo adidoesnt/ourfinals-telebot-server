@@ -105,6 +105,17 @@ class Application {
             }
         });
 
+        this.app.post('/assignments/id/:id/tutor/add', async (req, res) => {
+            const tutor_username = req.body['tutor_username'];
+            console.log(tutor_username);
+            const assignment_id = req.params.id
+            console.log(assignment_id);
+            const query = { "_id": ObjectId(assignment_id) }
+            const update = { "$set": { "tutor_username": tutor_username }}
+            await this.server.assignment_collection.updateOne(query, update);
+            return res.sendStatus(200);
+        });
+
         this.app.get('/assignments/code/:code', async (req, res) => {
             const code = req.params.code.toUpperCase();
             const query = {
@@ -115,7 +126,14 @@ class Application {
             }
             const options = { 
                 sort: { title: 1 },
-                projection: { _id: 1, module_code: 1, title: 1, description: 1, file_link: 1 }
+                projection: { 
+                    _id: 1, 
+                    module_code: 1, 
+                    title: 1, 
+                    description: 1, 
+                    file_link: 1, 
+                    student_username: 1 
+                }
             }
             const cursor = await this.server.assignment_collection.find(query, options);
             const assignments = await cursor.toArray();
@@ -134,7 +152,6 @@ class Application {
             request(`${this.url}users/${username}`, async function (error, response, body) {
                 const result = await response.body;
                 const student = JSON.parse(result);
-                console.log(student["assignments_as_student"])
                 const assignments = student["assignments_as_student"]
                     ? student["assignments_as_student"]
                     : [];
