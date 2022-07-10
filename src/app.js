@@ -122,9 +122,7 @@ class Application {
 
         this.app.post('/assignments/id/:id/tutor/add', async (req, res) => {
             const tutor_username = req.body['tutor_username'];
-            console.log(tutor_username);
             const assignment_id = req.params.id
-            console.log(assignment_id);
             const query = { "_id": ObjectId(assignment_id) }
             const update = { "$set": { "tutor_username": tutor_username }}
             await this.server.assignment_collection.updateOne(query, update);
@@ -164,7 +162,7 @@ class Application {
             const assignment_id = req.body['_id'];
             const username = req.params.username
             const self = this;
-            request(`${this.url}users/${username}`, async function (error, response, body) {
+            request(`${this.url}users/username/${username}`, async function (error, response, body) {
                 const result = await response.body;
                 const student = JSON.parse(result);
                 const assignments = student["assignments_as_student"]
@@ -182,7 +180,7 @@ class Application {
             const assignment_id = req.body['_id'];
             const username = req.params.username
             const self = this;
-            request(`${this.url}users/${username}`, async function (error, response, body) {
+            request(`${this.url}users/username/${username}`, async function (error, response, body) {
                 const result = await response.body;
                 const tutor = JSON.parse(result);
                 const assignments = tutor["assignments_as_tutor"]
