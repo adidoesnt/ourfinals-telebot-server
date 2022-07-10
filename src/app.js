@@ -152,7 +152,7 @@ class Application {
             }
             const cursor = await this.server.assignment_collection.find(query, options);
             const assignments = await cursor.toArray();
-            if(!assignments || assignments == [] || users.length == 0) {
+            if(!assignments || assignments == [] || assignments.length == 0) {
                 return res.status(404).send([]);
             } else {
                 return res.status(200).send(assignments);
