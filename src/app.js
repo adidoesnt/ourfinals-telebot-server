@@ -157,6 +157,34 @@ class Application {
             }
         });
 
+        this.app.get('/assignments/faculty/:faculty', async (req, res) => {
+            const faculty = req.params.faculty;
+            const query = {
+                $and: [
+                    { faculty: faculty },
+                    { tutor_username: "" }
+                ]
+            }
+            const options = { 
+                sort: { title: 1 },
+                projection: { 
+                    _id: 1,
+                    module_code: 1, 
+                    title: 1, 
+                    description: 1, 
+                    file_link: 1, 
+                    student_username: 1 
+                }
+            }
+            const cursor = await this.server.assignment_collection.find(query, options);
+            const assignments = await cursor.toArray();
+            if(!assignments || assignments == [] || assignments.length == 0) {
+                return res.status(404).send([]);
+            } else {
+                return res.status(200).send(assignments);
+            }
+        });
+
         // COMBINED ENDPOINTS
         this.app.post('/users/:username/assignments_as_student/add', async (req, res) => {
             const assignment_id = req.body['_id'];
