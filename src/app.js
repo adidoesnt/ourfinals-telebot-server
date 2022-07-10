@@ -80,7 +80,7 @@ class Application {
             });
         });
 
-        this.app.get('/users/:username', async (req, res) => {
+        this.app.get('/users/username/:username', async (req, res) => {
             const username = req.params.username;
             const user = await this.server.user_collection.findOne({username: username});
             if(user) {
@@ -89,6 +89,17 @@ class Application {
                 return res.status(404).send('not found');
             }
         });
+
+        this.app.get('users/faculty/:faculty', async (req, res) => {
+            const faculty = req.params.faculty;
+            const cursor = await this.server.user_collection.find({faculty: faculty});
+            const users = await cursor.toArray();
+            if(!users || users == [] || users.length == 0) {
+                return res.status(404).send([]);
+            } else {
+                return res.status(200).send(users);
+            }
+        })
 
         // ASSIGNMENT ENDPOINTS
         this.app.post('/assignments/add', async (req, res) => {
@@ -141,7 +152,7 @@ class Application {
             }
             const cursor = await this.server.assignment_collection.find(query, options);
             const assignments = await cursor.toArray();
-            if(!assignments || assignments == []) {
+            if(!assignments || assignments == [] || users.length == 0) {
                 return res.status(404).send([]);
             } else {
                 return res.status(200).send(assignments);
