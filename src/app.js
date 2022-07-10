@@ -90,7 +90,7 @@ class Application {
             }
         });
 
-        this.app.get('users/faculty/:faculty', async (req, res) => {
+        this.app.get('/users/faculty/:faculty', async (req, res) => {
             const faculty = req.params.faculty;
             const cursor = await this.server.user_collection.find({faculty: faculty});
             const users = await cursor.toArray();
